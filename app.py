@@ -20,7 +20,7 @@ app = Flask(__name__)
 # Database Setup
 #################################################
 # The database URI
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///titanic_db.sqlite" 
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/titanic_db.sqlite" 
 
 db = SQLAlchemy(app)
 
@@ -52,12 +52,17 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.name)
+    
+class Passenger(db.Model):
+    __tablename__ = 'train_data'
+    db.reflect()
+   
 
  # Create database tables
 @app.before_first_request
 def setup():
     # Recreate database each time for demo
-    db.drop_all()
+#     db.drop_all()
     db.create_all()
 
 # import warnings
@@ -94,8 +99,8 @@ model = pickle.loads(s)
 
 # import joblib to load model
 from sklearn.externals import joblib
-joblib.dump(model, 'model.pkl') 
-model = joblib.load('model.pkl') 
+knn_model = joblib.load('Resources/models/knn.pkl') 
+knn_scaler_model = joblib.load('Resources/models/knn_scaler.pkl') 
 
 # run X_test to see predictions
 predictions = model.predict(X_test)
@@ -111,17 +116,16 @@ print(prediction)
 
 @app.route("/")
 def index():
-    results = db.session.query(User.name, User.age).all()
-    
-    name = [result[0] for result in results]
+    results = db.session.query(Passenger.Sex, Passenger.Age).all()
+    sex = [result[0] for result in results]
     age = [int(result[1]) for result in results]
-
+    
     plot_trace = {
-        "x": name,
-        "y": age,
-        "type": "bar"
+        "sex": sex,
+        "age": age
     }
-    return render_template("index.html")
+    
+    return jsonify(plot_trace)
 
 @app.route("/send", methods=["GET", "POST"])
 def send():
