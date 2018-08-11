@@ -1,68 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="../static/styles/reset.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="stylesheet" href="../static/styles/style.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Titanic Project</title>
-</head>
+  <head>
 
-<body style="background: lightblue; color: black">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        <nav class="navbar navbar-default" id="navbar">
-                <div class="container-fluid">
-                  <!-- Brand and toggle get grouped for better mobile display -->
-                  <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                      
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">Titanic AI Project</a>
-              
-                  </div>
-              
-                  <!-- Collect the nav links, forms, and other content for toggling -->
-                  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                      <li><a href="/">Home</a></li>
-                      <li><a href="/send">Form</a></li>
+    <title>Titinic AI Project</title>
 
-                    </ul>
-                  </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-              </nav>
+    <!-- Bootstrap core CSS -->
+    <link href="../static/styles/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <div class="container">
-        <div class="jumbotron" style="text-align: center">
-            <h1>Titanic AI Project</h1>
-            
+    <!-- Custom fonts for this template -->
+    <link href="../static/styles/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/styles/grayscale.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="/">Titanic AI</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Go to the Main Page</a>
+            </li>
+
+          </ul>
         </div>
+      </div>
+    </nav>
 
-        <div class="row">
-            <div class="col-md-12" style="text-align: center; margin:20px">
-                <p style="font-size: 60px; text-align: center">{{ prediction }}d</p>
-                <h1 style="text-align: center"> Titanic AI Says That Based on informations You entered You would {{ prediction }} on Titanic accident</h1>
-                <div id="plot"></div>
-            </div>
-        </div>
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container d-flex h-100 align-items-center">
+        <div class="mx-auto text-center">
+          <h1 class="mx-auto my-0 text-uppercase">{{ prediction }}d</h1>
+          <br>
+          <h2 style="color:black" class="text-white-50 mx-auto mt-2 mb-5">Based on information you entered with 84% accuracy you would Die on Titanic Accident !.</h2>
+         </div>
+      </div>
+    </header>
 
+   
 
-       <div class="row" style="text-align: center; margin:20px">
-            <img src="../static/images/Titanic_2.jpg" alt="Titanic" style="height: 500px">
-        </div>
+    <!-- Footer -->
+    <footer class="bg-black small text-center text-white-50">
+      <div class="container">
+        Copyright &copy; Your Website 2018
+      </div>
+    </footer>
 
-        <p style="font-size: 60px; text-align: center">{{ result_list }}</p>
-        
-    </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="../static/styles/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/styles/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-</body>
+    <!-- Plugin JavaScript -->
+    <script src="../static/styles/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="../static/js/grayscale.min.js"></script>
+
+  </body>
 
 </html>

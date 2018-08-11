@@ -1,78 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../static/styles/reset.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/styles/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Titanic Project</title>
-    
-</head>
+  <head>
 
-<body style="background: lightblue; color: Black">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        <nav class="navbar navbar-default" id="navbar">
-                <div class="container-fluid">
-                  <!-- Brand and toggle get grouped for better mobile display -->
-                  <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                      
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">Titanic AI Project</a>
-              
-                  </div>
-              
-                  <!-- Collect the nav links, forms, and other content for toggling -->
-                  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                      <li><a href="/">Home</a></li>
-                      <li><a href="/send">Form</a></li>
+    <title>Titinic AI Project</title>
 
-                    </ul>
-                  </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-              </nav>
+    <!-- Bootstrap core CSS -->
+    <link href="../static/styles/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Custom fonts for this template -->
+    <link href="../static/styles/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <div class="container">
+    <!-- Custom styles for this template -->
+    <link href="../static/styles/grayscale.css" rel="stylesheet">
 
-    <div class="row" id="firstRow">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background: white; text-align: center; margin:20px"  >
-            <h1>Titanic AI Project</h1>
-            <p>Find you would survive on Titanic or Not!</p>
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Titanic AI</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#about">Titanic</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#projects">ML Comparision</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#form">Form</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#signup">Data Board</a>
+            </li>
+
+          </ul>
         </div>
-    </div>
-       
-    <div class="row" id="secondRow" style="text-align: center; margin:20px">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" >
-                <h1>Ask to our Titanic AI to find out !</h1>
-                
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <h2><a href="/send">Put your informations!</a></h2>
-                
-        </div>
-    </div>
+      </div>
+    </nav>
 
-    
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container d-flex h-100 align-items-center">
+        <div class="mx-auto text-center">
+          <h1 class="mx-auto my-0 text-uppercase">Titanic AI Project</h1>
+          <h2 class="text-white-50 mx-auto mt-2 mb-5">Find you would survive or not if you were on Titanic!.</h2>
+          <a href="#form" class="btn btn-primary js-scroll-trigger">Get Started</a>
+        </div>
+      </div>
+    </header>
 
-        <div class="row" id="thirdRow" style="text-align: center">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 " style="text-align: center">
-                <img src="../static/images/Titanic_1.jpg" alt="Titanic" style="height: 500px">
+    <!-- About Section -->
+    <section id="about" class="about-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="text-white mb-4">Titanic</h2>
+            <p class="text-white-50">The sinking of the RMS Titanic is one of the most infamous shipwrecks in history.  On April 15, 1912, the Titanic sank after colliding with an iceberg, killing 1502 out of 2224 passengers and crew.</p>
+          </div>
+        </div>
+        <img src="../static/images/Titanic_1.jpg" class="img-fluid" alt="">
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects-section bg-light">
+      <div class="container">
+
+        <!-- Featured Project Row -->
+        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+          <div class="col-xl-8 col-lg-7">
+            <img class="img-fluid mb-3 mb-lg-0" src="../static/images/Graph_1.jpg" alt="">
+          </div>
+          <div class="col-xl-4 col-lg-5">
+            <div class="featured-text text-center text-lg-left">
+              <h4>Accuracy Scores:</h4>
+              <p class="text-black-50 mb-0"> SVC : 0.83</p>
+              <p class="text-black-50 mb-0">KNN: 0.79</p>
+              <p class="text-black-50 mb-0">Random Forest: 0.76</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project One Row -->
+        <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+          <div class="col-lg-6">
+            <img class="img-fluid" src="../static/images/Titanic_2.jpg" alt="">
+          </div>
+          <div class="col-lg-6">
+            <div class="bg-black text-center h-100 project">
+              <div class="d-flex h-100">
+                <div class="project-text w-100 my-auto text-center text-lg-left">
+                  <h4 class="text-white">Misty</h4>
+                  <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                  <hr class="d-none d-lg-block mb-0 ml-0">
                 </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        
-    </div>
+        <!-- Project Two Row -->
+        <div class="row justify-content-center no-gutters">
+          <div class="col-lg-6">
+            <img class="img-fluid" src="../static/images/Titanic_1.jpg" alt="">
+          </div>
+          <div class="col-lg-6 order-lg-first">
+            <div class="bg-black text-center h-100 project">
+              <div class="d-flex h-100">
+                <div class="project-text w-100 my-auto text-center text-lg-right">
+                  <h4 class="text-white">Mountains</h4>
+                  <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well, try this theme on a small screen!</p>
+                  <hr class="d-none d-lg-block mb-0 mr-0">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-</body>
+      </div>
+    </section>
+
+<!-- Form Section -->
+    <section id="form" class="about-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="text-white mb-4">Titanic Survival Check Point</h2>
+            <h3 class="text-white mb-4">Please enter your information to see the result</h3>
+            <div class="row" style="margin-bottom:100px">
+              <div class="col-md-offset-12 col-md-12">
+                  <form method="POST" action="/send" role="form", name="petform">
+                      <div class="form-group">
+                          <label style="color:white" for="inputName">Name</label>
+                          <input type="text" class="form-control" id="inputName" name="userName" placeholder="Name">
+                      </div>
+                      <div class="form-group">
+                        <label style="color:white" for="inputName">Passanger Class (1 = First Class, 2 = Second Class, 3= Third Class)</label>
+                        <input type="text" class="form-control" id="inputPclass" name="userPclass" placeholder="Pclass">
+                    </div>
+                      <div class="form-group">
+                          <label style="color:white" for="inputLat">Age</label>
+                          <input  type="text" class="form-control" id="inputAge" name="userAge" placeholder="Age">
+                      </div>
+                      <div class="form-group">
+                              <label style="color:white" for="inputLat"> Embarked (C = Cherbourg, Q = Queenstown, S = Southampton)</label>
+                              <input type="text" class="form-control" id="inputAge" name="userEmbarked" placeholder="Embarked">
+                          </div>
+                      <div class="form-group">
+                          <label style="color:white" for="inputLon">Fare Ticket Type (Basic Economy, Economy, Middle Class, Business, Upper Business) </label>
+                          <input type="text" class="form-control" id="inputTicket" name="userTicket" placeholder="Ticket">
+                      </div>
+                      <div class="form-group">
+                              <label style="color:white" for="inputLon">Gender (Male, Female) </label>
+                              <input type="text" class="form-control" id="inputGender" name="userGender" placeholder="Gender">
+                          </div>
+                          
+                      <input type="submit" value="Submit" class="btn btn-default">
+                  </form>
+              </div>
+          </div>
+          
+          
+          </div>
+        </div>
+        <img src="../static/images/Titanic_1.jpg" class="img-fluid" alt="">
+      </div>
+    </section>
+
+
+    <!-- Signup Section -->
+    <section id="signup" class="signup-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-lg-8 mx-auto text-center">
+
+            <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+            <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+
+            <form class="form-inline d-flex">
+              <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
+              <button type="submit" class="btn btn-primary mx-auto">Subscribe</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section bg-black">
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Address</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">4923 Market Street, Orlando FL</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-envelope text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Email</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">
+                  <a href="#">team@tatinic.com</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Phone</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">+1 (555) 902-8832</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="social d-flex justify-content-center">
+          <a href="#" class="mx-2">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="mx-2">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="mx-2">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black small text-center text-white-50">
+      <div class="container">
+        Copyright &copy; Your Website 2018
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../static/styles/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/styles/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="../static/styles/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="../static/js/grayscale.min.js"></script>
+
+  </body>
 
 </html>
