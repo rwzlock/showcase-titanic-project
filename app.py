@@ -125,7 +125,8 @@ def index():
         "age": age
     }
     
-    return jsonify(plot_trace)
+    # return jsonify(plot_trace)
+    return render_template("index.html")
 
 @app.route("/send", methods=["GET", "POST"])
 def send():
@@ -167,7 +168,7 @@ def send():
             newUser[0][3]= 2
 
 
-        if userGender == "Male":
+        if userGender.lower() == "male":
             newUser[0][1]= 0
         else:
             newUser[0][1]= 1
@@ -216,14 +217,10 @@ def send():
                 "Survived": survived,
 
             }
-            return jsonify(plot_trace)
             
-#         prediction = model.predict(newUser)
-        
-#         return redirect("/result", code=302)
-#         # return jsonify(newUser)
+            return redirect("/result", code=302)
 
-#     return render_template("form.html")
+        return render_template("form.html")
 
 
 @app.route("/result")
@@ -238,21 +235,26 @@ def pals():
 @app.route("/plot")
 def plot():
     
-    results = db.session.query(User.name,User.pclass,User.sex, User.age,User.sibsp, User.parch, User.fare, User.embarked, User.survived).all()
+    #Same query method as used in the /plot route
+    results = db.session.query(User.sex,User.survived).all()
+    sexlist = [result[0] for result in results]
+    survivedlist = [result[0] for result in results]
+    sexes = list(set(sexlist))
+    sexcounts = []
+    for sex in sexes:
+        counter = 0
+        for x in range(0, len(sexlist)):
+            if(str(sexlist[x]) == str(sex) and survivedlist[x] == 0 ):
+                counter=counter+1
+        sexcounts.append(counter)
     
-    name = [result[0] for result in results]
-    age = [result[1] for result in results]
-    sex = [result[2] for result in results]
+    sexes_trace = {
+        "x": sexes,
+        "y": sexcounts,
+        "type": "bar"
+    }
+    return jsonify(sexes_trace)
 
-    user_data = [{
-
-        "name": name,
-        "age": age,
-        "sex": sex,
-
-    }]
-
-    return jsonify(user_data)
 #Run the app. debug=True is essential to be able to rerun the server any time changes are saved to the Python file
 if __name__ == "__main__":
-    app.run(debug=True, port=5035)
+    app.run(debug=True, port=5036)
