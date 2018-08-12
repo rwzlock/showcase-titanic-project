@@ -47,9 +47,9 @@ Plotly.d3.json(pasclass_url, function(error, response) {
     var data = [response];
     console.log(response)
     var layout = { margin: { t: 30, b:50 },
-                   title: "Number of Passengers by Passsenger Class",
-                   xaxis: { title: "Passenger by Class "},
-                   yaxis: { title: "Number of Passenger"}            
+                   title: "Number of Passengers by Passenger Class",
+                   xaxis: { title: "Passengers by Class "},
+                   yaxis: { title: "Number of Passengers"}            
     }
     Plotly.plot("bar4", data, layout)
 })
