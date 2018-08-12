@@ -223,8 +223,8 @@ def gender():
     }
     return jsonify(sex_trace)
 
-@app.route("/plots")
-def plots():
+@app.route("/pasgender")
+def pasgender():
     
     #Same query method as used in the /plot route
     results = db.session.query(Passenger.Sex, Passenger.Survived).all()
@@ -247,6 +247,31 @@ def plots():
     }
     return jsonify(sex_trace)
 
+
+@app.route("/pasclass")
+def pasclass():
+    
+    #Same query method as used in the /plot route
+    results = db.session.query(Passenger.Pclass, Passenger.Survived).all()
+    sexlist = [result[0] for result in results]
+    survivedlist = [result[1] for result in results]
+    sexes = list(set(sexlist))
+    sexcounts = []
+    
+    for sex in sexes:
+        counter = 0
+        for x in range(0, len(sexlist)):
+            if(str(sexlist[x]) == str(sex) ):
+                counter=counter+1
+        sexcounts.append(counter)
+    
+    sex_trace = {
+        "x": ["First Class","Second Class", "Third Class"],
+        "y": sexcounts,
+        "type": "bar"
+    }
+    return jsonify(sex_trace)
+
 #Run the app. debug=True is essential to be able to rerun the server any time changes are saved to the Python file
 if __name__ == "__main__":
-    app.run(debug=True, port=5015)
+    app.run(debug=True, port=5017)

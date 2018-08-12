@@ -1,6 +1,8 @@
 var embarked_url = "/embarked";
 var gender_url = "/gender";
-var plots_url = "/plots";
+var pasgender_url = "/pasgender";
+var pasclass_url = "/pasclass";
+
 
 Plotly.d3.json(embarked_url, function(error, response) {
     if (error) return console.warn(error);
@@ -28,7 +30,7 @@ Plotly.d3.json(gender_url, function(error, response) {
     Plotly.plot("bar2", data, layout)
 })
 
-Plotly.d3.json(plots_url, function(error, response) {
+Plotly.d3.json(pasgender_url, function(error, response) {
     if (error) return console.warn(error);
     var data = [response];
     console.log(response)
@@ -38,4 +40,16 @@ Plotly.d3.json(plots_url, function(error, response) {
                    yaxis: { title: "Number of Passenger"}            
     }
     Plotly.plot("bar3", data, layout)
+})
+
+Plotly.d3.json(pasclass_url, function(error, response) {
+    if (error) return console.warn(error);
+    var data = [response];
+    console.log(response)
+    var layout = { margin: { t: 30, b:50 },
+                   title: "Number of Passengers by Passsenger Class",
+                   xaxis: { title: "Passenger by Class "},
+                   yaxis: { title: "Number of Passenger"}            
+    }
+    Plotly.plot("bar4", data, layout)
 })
