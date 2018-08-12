@@ -240,7 +240,7 @@ def embarked():
         embarkedcounts.append(counter)
     
     embarked_trace = {
-        "x": embarkedes,
+        "x": ["Cherbourg","Queenstown","Southampton"],
         "y": embarkedcounts,
         "type": "bar"
     }
@@ -264,7 +264,7 @@ def gender():
         sexcounts.append(counter)
     
     sex_trace = {
-        "x": sexes,
+        "x": ["Male","Female"],
         "y": sexcounts,
         "type": "bar"
     }
