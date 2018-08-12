@@ -73,78 +73,36 @@ def setup():
 import numpy as np
 import pandas as pd
 
-# read train and test csv files
-train_data_cleaned_v2 = pd.read_csv('Resources/AG_train-test_v2.csv')
-
-# select the columns will be used in testing
-X = train_data_cleaned_v2.drop('Survived', axis = 1)
-y = train_data_cleaned_v2['Survived']
-
-X.drop('Unnamed: 0', axis = 1, inplace=True)
-
-
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
-
-
-# Support vector machine linear classifier
-from sklearn.svm import SVC
-model = SVC(kernel='linear')
-model.fit(X_train, y_train)
-
-# import pickle to store model
-import pickle
-s = pickle.dumps(model)
-model = pickle.loads(s)
-
 # import joblib to load model
 from sklearn.externals import joblib
 knn_model = joblib.load('Resources/models/knn.pkl') 
 knn_scaler_model = joblib.load('Resources/models/knn_scaler.pkl') 
 
-# run X_test to see predictions
-predictions = model.predict(X_test)
-
 # create new User list to store newUser data
 newUser=[]
 newUser.append([3,0,35,0,0,1,1])
+newUser = knn_scaler_model.transform(newUser)
 
 # make prediction with new user data
-prediction = model.predict(newUser)
+prediction = knn_model.predict(newUser)
 print(prediction)
 
 
 @app.route("/")
 def index():
-    results = db.session.query(Passenger.Sex, Passenger.Age).all()
-    sex = [result[0] for result in results]
-    age = [int(result[1]) for result in results]
-    
-    plot_trace = {
-        "sex": sex,
-        "age": age
-    }
-    
-    # return jsonify(plot_trace)
+
     return render_template("index.html")
 
 @app.route("/send", methods=["GET", "POST"])
 def send():
     if request.method == "POST":
-        newUser.append([2,0,20,1,1,1,0])
-        
+                
         userName = request.form["userName"]
         userPclass = request.form["userPclass"]
         userEmbarked = request.form["userEmbarked"]
         userAge = request.form["userAge"]
         userTicket= request.form["userTicket"]
         userGender= request.form["userGender"]
-        # userName[0] = request.form["userName"]
-        # newUser.append(userName)
-        # userAge = request.form["userAge"]
-        # newUser.append(userAge)
-        # userTicket = request.form["userTicket"]
-        # newUser.append(userTicket)
         
         if userGender.lower() == "male":
             newUser[0][1]= 0
@@ -171,12 +129,7 @@ def send():
         else:
             newUser[0][5]= 4
 
-
-
-
-
-
-        prediction = model.predict(newUser)
+        prediction = knn_model.predict(newUser)
 
         user = User(name=userName, pclass = userPclass, sex = newUser[0][1], age=userAge, sibsp = 0, parch = 0, fare = newUser[0][5], embarked = newUser[0][3], survived = int(prediction[0]))
         db.session.add(user)
@@ -215,7 +168,7 @@ def send():
 
 @app.route("/result")
 def pals():
-    prediction = model.predict(newUser)
+    prediction = knn_model.predict(newUser)
 
     if prediction[0] == 1:
         return render_template('result.html', prediction = "Survive", result_list = newUser )
