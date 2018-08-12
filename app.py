@@ -146,9 +146,20 @@ def send():
         # userTicket = request.form["userTicket"]
         # newUser.append(userTicket)
         
-        
+        if userGender.lower() == "male":
+            newUser[0][1]= 0
+        else:
+            newUser[0][1]= 1
+
         newUser[0][2]= int(userAge)
         
+        if userEmbarked.lower() == "c":
+            newUser[0][3]= 0
+        if userEmbarked.lower() == "q":
+            newUser[0][3]= 1
+        if userEmbarked.lower() == "s":
+            newUser[0][3]= 2
+
         if userTicket == "Basic Economy":
             newUser[0][5]= 0
         if userTicket == "Economy":
@@ -160,67 +171,46 @@ def send():
         else:
             newUser[0][5]= 4
 
-        if userEmbarked == "C":
-            newUser[0][3]= 0
-        if userTicket == "Q":
-            newUser[0][3]= 1
-        else:
-            newUser[0][3]= 2
 
 
-        if userGender.lower() == "male":
-            newUser[0][1]= 0
-        else:
-            newUser[0][1]= 1
-
-        if request.method == "POST":
-            userName = request.form["userName"]
-            userEmbarked = request.form["userEmbarked"]
-            if userEmbarked == "C":
-                newUser[0][3]= 0
-            if userTicket == "Q":
-                newUser[0][3]= 1
-            else:
-                newUser[0][3]= 2
-
-            userAge = request.form["userAge"]
-
-            prediction = model.predict(newUser)
-
-            print(prediction)
-            user = User(name=userName, pclass = userPclass, sex = newUser[0][1], age=userAge, sibsp = 0, parch = 0, fare = newUser[0][5], embarked = newUser[0][3], survived = int(prediction[0]))
-            db.session.add(user)
-            db.session.commit()
-
-            results = db.session.query(User.name,User.pclass,User.sex, User.age,User.sibsp, User.parch, User.fare, User.embarked, User.survived).all()
-    
-            name = [result[0] for result in results]
-            pclass = [int(result[1]) for result in results]
-            sex = [int(result[2]) for result in results]
-            age = [int(result[3]) for result in results]
-            sibsp = [int(result[4]) for result in results]
-            parch = [int(result[5]) for result in results]
-            fare = [result[6] for result in results]
-            embarked = [result[7] for result in results]
-            survived = [int(result[8]) for result in results]
 
 
-            plot_trace = {
-                "name": name,
-                "Pclass": pclass,
-                "Gender": sex,
-                "Age": age,
-                "Sibsp": sibsp,
-                "Parch": parch,
-                "fare": age,
-                "Embarked": embarked,
-                "Survived": survived,
 
-            }
-            
-            return redirect("/result", code=302)
+        prediction = model.predict(newUser)
 
-        return render_template("form.html")
+        user = User(name=userName, pclass = userPclass, sex = newUser[0][1], age=userAge, sibsp = 0, parch = 0, fare = newUser[0][5], embarked = newUser[0][3], survived = int(prediction[0]))
+        db.session.add(user)
+        db.session.commit()
+
+        results = db.session.query(User.name,User.pclass,User.sex, User.age,User.sibsp, User.parch, User.fare, User.embarked, User.survived).all()
+
+        name = [result[0] for result in results]
+        pclass = [int(result[1]) for result in results]
+        sex = [int(result[2]) for result in results]
+        age = [int(result[3]) for result in results]
+        sibsp = [int(result[4]) for result in results]
+        parch = [int(result[5]) for result in results]
+        fare = [result[6] for result in results]
+        embarked = [result[7] for result in results]
+        survived = [int(result[8]) for result in results]
+
+
+        plot_trace = {
+            "name": name,
+            "Pclass": pclass,
+            "Gender": sex,
+            "Age": age,
+            "Sibsp": sibsp,
+            "Parch": parch,
+            "fare": age,
+            "Embarked": embarked,
+            "Survived": survived,
+
+        }
+        
+        return redirect("/result", code=302)
+
+    return render_template("form.html")
 
 
 @app.route("/result")
@@ -232,29 +222,54 @@ def pals():
     else:
         return render_template('result.html', prediction = "Die", result_list = newUser )
 
-@app.route("/plot")
-def plot():
+@app.route("/embarked")
+def embarked():
+    
+    #Same query method as used in the /plot route
+    results = db.session.query(User.embarked,User.survived).all()
+    embarkedlist = [result[0] for result in results]
+    survivedlist = [result[1] for result in results]
+    embarkedes = list(set(embarkedlist))
+    embarkedcounts = []
+    
+    for embarked in embarkedes:
+        counter = 0
+        for x in range(0, len(embarkedlist)):
+            if(str(embarkedlist[x]) == str(embarked) ):
+                counter=counter+1
+        embarkedcounts.append(counter)
+    
+    embarked_trace = {
+        "x": embarkedes,
+        "y": embarkedcounts,
+        "type": "bar"
+    }
+    return jsonify(embarked_trace)
+
+@app.route("/gender")
+def gender():
     
     #Same query method as used in the /plot route
     results = db.session.query(User.sex,User.survived).all()
     sexlist = [result[0] for result in results]
-    survivedlist = [result[0] for result in results]
+    survivedlist = [result[1] for result in results]
     sexes = list(set(sexlist))
     sexcounts = []
+    
     for sex in sexes:
         counter = 0
         for x in range(0, len(sexlist)):
-            if(str(sexlist[x]) == str(sex) and survivedlist[x] == 0 ):
+            if(str(sexlist[x]) == str(sex) ):
                 counter=counter+1
         sexcounts.append(counter)
     
-    sexes_trace = {
+    sex_trace = {
         "x": sexes,
         "y": sexcounts,
         "type": "bar"
     }
-    return jsonify(sexes_trace)
+    return jsonify(sex_trace)
 
 #Run the app. debug=True is essential to be able to rerun the server any time changes are saved to the Python file
 if __name__ == "__main__":
-    app.run(debug=True, port=5036)
+    app.run(debug=True, port=5013)
