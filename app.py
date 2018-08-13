@@ -2,6 +2,7 @@
 import os
 import numpy as np
 import pandas as pd
+from sklearn.externals import joblib
 from flask import (
     Flask,
     render_template,
@@ -22,8 +23,13 @@ app = Flask(__name__)
 # The database URI
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/titanic_db.sqlite" 
 
-db = SQLAlchemy(app)
+#Use joblib to load the most accurate machine learning model
+svc = joblib.load('Resources/models/svc.pkl') 
+svc_scaler = joblib.load('Resources/models/svc_scaler.pkl') 
 
+#Initialize app
+db = SQLAlchemy(app)
+#Define database table structure from Flask app
 class User(db.Model):
     __tablename__ = 'user'
 
@@ -52,40 +58,26 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.name)
-    
+#Reflect the train_data table into the Flask app
 class Passenger(db.Model):
     __tablename__ = 'train_data'
     db.reflect()
    
 
- # Create database tables
+
 @app.before_first_request
 def setup():
     # Recreate database each time for demo
-#     db.drop_all()
     db.create_all()
+    
+    #Define list to store the input from the form.
+    #Pclass, Sex, Age, SibSp, Parch, Fare, Embarked is the newUser format
+    newUser=[3,0,35,0,0,100,1]
+    newUser = svc_scaler.transform([newUser])
 
-# import warnings
-# warnings.simplefilter('ignore')
-
-# %matplotlib inline
-# import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-
-# import joblib to load model
-from sklearn.externals import joblib
-knn_model = joblib.load('Resources/models/knn.pkl') 
-knn_scaler_model = joblib.load('Resources/models/knn_scaler.pkl') 
-
-# create new User list to store newUser data
-newUser=[]
-newUser.append([3,0,35,0,0,1,1])
-newUser = knn_scaler_model.transform(newUser)
-
-# make prediction with new user data
-prediction = knn_model.predict(newUser)
-print(prediction)
+    # make prediction with the form data
+    prediction = svc.predict(newUser)
+    print(prediction)
 
 
 @app.route("/")
@@ -95,47 +87,51 @@ def index():
 
 @app.route("/send", methods=["GET", "POST"])
 def send():
+    newUser = [0,0,0,0,0,0,0] 
     if request.method == "POST":
-                
+               
         userName = request.form["userName"]
         userPclass = request.form["userPclass"]
+        newUser[0] = userPclass
         userEmbarked = request.form["userEmbarked"]
         userAge = request.form["userAge"]
         userTicket= request.form["userTicket"]
         userGender= request.form["userGender"]
-        
-        if userGender.lower() == "male":
-            newUser[0][1]= 0
-        else:
-            newUser[0][1]= 1
 
-        newUser[0][2]= int(userAge)
+        if userGender.lower() == "male":
+            newUser[1] = 0
+        else:
+            newUser[1] = 1
+
+        newUser[2] = int(userAge)
+
+        newUser[3] = 0
+        newUser[4] = 0
+        newUser[5] = userTicket
+        
         
         if userEmbarked.lower() == "c":
-            newUser[0][3]= 0
-        if userEmbarked.lower() == "q":
-            newUser[0][3]= 1
-        if userEmbarked.lower() == "s":
-            newUser[0][3]= 2
+            newUser[6] = 0
+        elif userEmbarked.lower() == "q":
+            newUser[6] = 1
+        elif userEmbarked.lower() == "s":
+            newUser[6] = 2
 
-        if userTicket == "Basic Economy":
-            newUser[0][5]= 0
-        if userTicket == "Economy":
-            newUser[0][5]= 1
-        if userTicket == "Middle Class":
-            newUser[0][5]= 2
-        if userTicket == "Business":
-            newUser[0][5]= 3
-        else:
-            newUser[0][5]= 4
 
-        prediction = knn_model.predict(newUser)
+        testUser = svc_scaler.transform([newUser])
+        prediction = svc.predict(testUser)
 
-        user = User(name=userName, pclass = userPclass, sex = newUser[0][1], age=userAge, sibsp = 0, parch = 0, fare = newUser[0][5], embarked = newUser[0][3], survived = int(prediction[0]))
+        user = User(name=userName, pclass=userPclass, sex=newUser[1],
+                    age=userAge, sibsp = 0, parch = 0, fare = newUser[5],
+                    embarked = newUser[6], survived=int(prediction[0])
+                   )
+
         db.session.add(user)
         db.session.commit()
 
-        results = db.session.query(User.name,User.pclass,User.sex, User.age,User.sibsp, User.parch, User.fare, User.embarked, User.survived).all()
+        results = db.session.query(User.name, User.pclass, User.sex, 
+                                   User.age,  User.sibsp,  User.parch, 
+                                   User.fare, User.embarked, User.survived).all()
 
         name = [result[0] for result in results]
         pclass = [int(result[1]) for result in results]
@@ -158,7 +154,6 @@ def send():
             "fare": age,
             "Embarked": embarked,
             "Survived": survived,
-
         }
         
         return redirect("/result", code=302)
@@ -167,13 +162,38 @@ def send():
 
 
 @app.route("/result")
-def pals():
-    prediction = knn_model.predict(newUser)
+def result():
 
-    if prediction[0] == 1:
-        return render_template('result.html', prediction = "Survive", result_list = newUser )
+    results = db.session.query(User.name, User.pclass, User.sex, 
+                                   User.age,  User.sibsp,  User.parch, 
+                                   User.fare, User.embarked, User.survived).all()
+
+    name = [result[0] for result in results]
+    pclass = [int(result[1]) for result in results]
+    sex = [int(result[2]) for result in results]
+    age = [int(result[3]) for result in results]
+    sibsp = [int(result[4]) for result in results]
+    parch = [int(result[5]) for result in results]
+    fare = [result[6] for result in results]
+    embarked = [result[7] for result in results]
+    survived = [int(result[8]) for result in results]
+
+
+    newUser = [ pclass[-1], sex[-1], age[-1],
+                sibsp[-1], parch[-1], fare[-1],
+                embarked[-1] ]
+
+    testUser = svc_scaler.transform([newUser])
+    prediction = svc.predict(testUser)
+    chance = svc.predict_proba(testUser)
+    percentage = (chance[0][1]*100)
+    percentage = round(percentage, 2)
+
+
+    if prediction == 1:
+        return render_template('result.html', prediction = "Survive", percentage = percentage, result_list = newUser )
     else:
-        return render_template('result.html', prediction = "Die", result_list = newUser )
+        return render_template('result.html', prediction = "Die", percentage = percentage, result_list = newUser )
 
 @app.route("/embarked")
 def embarked():
@@ -203,7 +223,7 @@ def embarked():
 def gender():
     
     #Same query method as used in the /plot route
-    results = db.session.query(User.sex,User.survived).all()
+    results = db.session.query(User.sex, User.survived).all()
     sexlist = [result[0] for result in results]
     survivedlist = [result[1] for result in results]
     sexes = list(set(sexlist))
@@ -212,7 +232,7 @@ def gender():
     for sex in sexes:
         counter = 0
         for x in range(0, len(sexlist)):
-            if(str(sexlist[x]) == str(sex) ):
+            if( str(sexlist[x]) == str(sex) ):
                 counter=counter+1
         sexcounts.append(counter)
     
@@ -274,4 +294,4 @@ def pasclass():
 
 #Run the app. debug=True is essential to be able to rerun the server any time changes are saved to the Python file
 if __name__ == "__main__":
-    app.run(debug=True, port=5017)
+    app.run(debug=True, port=5018)
