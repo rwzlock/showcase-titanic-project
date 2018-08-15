@@ -1,4 +1,4 @@
-# import necessary libraries
+# import dependencies
 import os
 import numpy as np
 import pandas as pd
@@ -9,7 +9,7 @@ from flask import (
     jsonify,
     request,
     redirect)
-
+from sklearn.externals import joblib
 from flask_sqlalchemy import SQLAlchemy
 
 #################################################
@@ -75,16 +75,31 @@ def setup():
     newUser=[3,0,35,0,0,100,1]
     newUser = svc_scaler.transform([newUser])
 
+# load model from pkl file
+knn_model = joblib.load('Resources/models/knn.pkl') 
+knn_scaler_model = joblib.load('Resources/models/knn_scaler.pkl') 
+
+# create new User list to store newUser data
+newUser=[]
+newUser.append([3,0,35,0,0,1,1])
+#use scaler_model to transform data
+# newUser = knn_scaler_model.transform(newUser)
+
+# make prediction with new user data
+# prediction = knn_model.predict(newUser)
+# print(prediction)
     # make prediction with the form data
     prediction = svc.predict(newUser)
     print(prediction)
 
 
+# app route to calls index page
 @app.route("/")
 def index():
 
     return render_template("index.html")
 
+#app route to gets inputs from the user input form
 @app.route("/send", methods=["GET", "POST"])
 def send():
     newUser = [0,0,0,0,0,0,0] 
@@ -117,6 +132,18 @@ def send():
         elif userEmbarked.lower() == "s":
             newUser[6] = 2
 
+        #transform newUser to scaled newUser 
+        scaled_newUser = knn_scaler_model.transform(newUser)
+        # get presiction for new User
+        prediction = knn_model.predict(scaled_newUser)
+
+        # store user information in database
+        user = User(name=userName, pclass = userPclass, sex = newUser[0][1], age=userAge, sibsp = 0, parch = 0, fare = newUser[0][5], embarked = newUser[0][3], survived = int(prediction[0]))
+        db.session.add(user)
+        db.session.commit()
+
+        # query database to get user information
+        results = db.session.query(User.name,User.pclass,User.sex, User.age,User.sibsp, User.parch, User.fare, User.embarked, User.survived).all()
 
         testUser = svc_scaler.transform([newUser])
         prediction = svc.predict(testUser)
@@ -133,6 +160,7 @@ def send():
                                    User.age,  User.sibsp,  User.parch, 
                                    User.fare, User.embarked, User.survived).all()
 
+        # get user information to use in plotly charts
         name = [result[0] for result in results]
         pclass = [int(result[1]) for result in results]
         sex = [int(result[2]) for result in results]
@@ -143,7 +171,7 @@ def send():
         embarked = [result[7] for result in results]
         survived = [int(result[8]) for result in results]
 
-
+        # creare plot trace 
         plot_trace = {
             "name": name,
             "Pclass": pclass,
@@ -160,8 +188,23 @@ def send():
 
     return render_template("form.html")
 
-
+# app route to result oage
 @app.route("/result")
+def pals():
+    # query database to get user information
+    results = db.session.query(User.name,User.pclass,User.sex, User.age,User.sibsp, User.parch, User.fare, User.embarked, User.survived).all()
+    print(results[:-1])    
+    user = []
+    user.append(results[-1][1:8])
+    #transform newUser to scaled newUser 
+    scaled_newUser = knn_scaler_model.transform(user)
+
+    # get prediction using knn model
+    prediction = knn_model.predict(scaled_newUser)
+
+    # retryn outcome based on prediction value
+    if prediction[0] == 1:
+        return render_template('result.html', prediction = "Survive", result_list = newUser )
 def result():
 
     results = db.session.query(User.name, User.pclass, User.sex, 
@@ -195,6 +238,7 @@ def result():
     else:
         return render_template('result.html', prediction = "Die", percentage = percentage, result_list = newUser )
 
+# app route to create chart based on embarked port values
 @app.route("/embarked")
 def embarked():
     
@@ -219,9 +263,12 @@ def embarked():
     }
     return jsonify(embarked_trace)
 
+# app route to create chart based on gender values
 @app.route("/gender")
 def gender():
     
+    #query information from database
+    results = db.session.query(User.sex,User.survived).all()
     #Same query method as used in the /plot route
     results = db.session.query(User.sex, User.survived).all()
     sexlist = [result[0] for result in results]
@@ -243,10 +290,11 @@ def gender():
     }
     return jsonify(sex_trace)
 
+# app route to create chart based on passenger gender
 @app.route("/pasgender")
 def pasgender():
     
-    #Same query method as used in the /plot route
+    #query information from database
     results = db.session.query(Passenger.Sex, Passenger.Survived).all()
     sexlist = [result[0] for result in results]
     survivedlist = [result[1] for result in results]
@@ -267,11 +315,11 @@ def pasgender():
     }
     return jsonify(sex_trace)
 
-
+# app route to create chart based on passenger class
 @app.route("/pasclass")
 def pasclass():
     
-    #Same query method as used in the /plot route
+    #query information from database
     results = db.session.query(Passenger.Pclass, Passenger.Survived).all()
     sexlist = [result[0] for result in results]
     survivedlist = [result[1] for result in results]
